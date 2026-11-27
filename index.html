@@ -338,11 +338,52 @@ body.is-dragging .quick-drop-bar{display:flex}
 .detail-memo-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:8px;color:#84705f;font-size:12px}
 
 .board-section .section-head{margin-bottom:10px}
+/* Password Lock Gate */
+body.is-locked{overflow:hidden}
+body.is-locked .app{display:none!important}
+.auth-gate{position:fixed;inset:0;z-index:999;display:grid;place-items:center;padding:20px;background:radial-gradient(circle at 20% 15%,rgba(163,109,114,.18),transparent 42%),radial-gradient(circle at 82% 85%,rgba(173,95,71,.15),transparent 45%),linear-gradient(180deg,#f9f4ec 0%,#f2eae0 100%)}
+.auth-gate[hidden]{display:none!important}
+.auth-card{width:min(430px,100%);padding:30px 28px 26px;border:1px solid #e6d8c9;border-radius:24px;background:rgba(255,252,247,.95);box-shadow:0 24px 55px rgba(72,46,35,.15);backdrop-filter:blur(12px);text-align:center}
+.auth-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 13px;border:1px solid #e7d5d8;border-radius:999px;color:#83535b;background:#f8eef0;font-size:11px;font-weight:800;letter-spacing:.08em}
+.auth-icon{display:grid;place-items:center;width:54px;height:54px;margin:16px auto 12px;border-radius:16px;color:#fff;background:linear-gradient(135deg,#9b6b70,#7c4d52);font-size:24px;box-shadow:0 10px 22px rgba(124,77,82,.24)}
+.auth-card h2{margin:0 0 6px;color:#3d2f28;font-family:"Noto Serif TC","Songti TC",Georgia,serif;font-size:24px}
+.auth-card p{margin:0 0 20px;color:#78685c;font-size:13px;line-height:1.6}
+.auth-form{display:flex;flex-direction:column;gap:11px}
+.auth-input-wrap{position:relative;display:flex;align-items:center}
+.auth-input{width:100%;height:46px;padding:0 44px 0 16px;border:1.5px solid #dfd1c1;border-radius:13px;color:#3f3129;background:#fff;font:inherit;font-size:16px;font-weight:700;letter-spacing:.14em;text-align:center;transition:border-color .15s,box-shadow .15s}
+.auth-input::placeholder{letter-spacing:.03em;font-weight:500;color:#a49486;font-size:14px}
+.auth-input:focus{outline:0;border-color:#9b6b70;box-shadow:0 0 0 4px rgba(155,107,112,.16)}
+.auth-toggle-vis{position:absolute;right:8px;width:32px;height:32px;border:0;border-radius:8px;color:#837163;background:transparent;font-size:14px}
+.auth-toggle-vis:hover{background:#f4ece2;color:#4d3c31}
+.auth-submit{height:45px;border:0;border-radius:13px;color:#fff;background:linear-gradient(135deg,#96656b,#78494f);font-size:14px;font-weight:800;letter-spacing:.03em;box-shadow:0 10px 20px rgba(120,73,79,.22);transition:transform .15s,filter .15s}
+.auth-submit:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.auth-error{min-height:19px;margin:2px 0 0;color:#b84335;font-size:12px;font-weight:750}
+.auth-lock-btn{display:inline-flex;align-items:center;gap:5px;height:38px;padding:0 12px;border:1px solid #e1d4c6;border-radius:999px;color:#6f5c4e;background:rgba(255,252,247,.88);font-size:12px;font-weight:750;transition:background .15s,border-color .15s}
+.auth-lock-btn:hover{border-color:#bca38d;background:#fff}
+@keyframes authShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-7px)}40%,80%{transform:translateX(7px)}}
+.auth-card.shake{animation:authShake .34s ease}
 @media(max-width:1240px){.kanban-board[data-view="vertical"]{grid-template-columns:repeat(3,minmax(240px,1fr))}}
 @media(max-width:860px){.kanban-board[data-view="vertical"]{grid-template-columns:repeat(2,minmax(240px,1fr))}}
-@media(max-width:680px){.toolbar{flex-direction:column;align-items:stretch;gap:10px;margin:18px 0 14px}.searchbox{flex:none;width:100%;max-width:none}.toolbar-controls{width:100%;justify-content:space-between;gap:8px}.save-badge{height:34px;padding:0 10px;font-size:11px}.view-btn{height:35px;padding:0 11px;font-size:12px}.kanban-board[data-view="vertical"]{grid-template-columns:repeat(5,minmax(82vw,1fr));gap:11px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px}.kanban-board[data-view="vertical"] .status-column{scroll-snap-align:start}.kanban-board[data-view="horizontal"] .dropzone{grid-template-columns:1fr}.column-head h3{font-size:18px}.board-section .section-head p{line-height:1.5}}
+@media(max-width:680px){.toolbar{flex-direction:column;align-items:stretch;gap:10px;margin:18px 0 14px}.searchbox{flex:none;width:100%;max-width:none}.toolbar-controls{width:100%;justify-content:space-between;gap:8px}.save-badge,.auth-lock-btn{height:34px;padding:0 10px;font-size:11px}.view-btn{height:35px;padding:0 11px;font-size:12px}.kanban-board[data-view="vertical"]{grid-template-columns:repeat(5,minmax(82vw,1fr));gap:11px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:14px}.kanban-board[data-view="vertical"] .status-column{scroll-snap-align:start}.kanban-board[data-view="horizontal"] .dropzone{grid-template-columns:1fr}.column-head h3{font-size:18px}.board-section .section-head p{line-height:1.5}}
 </style></head>
-<body><main class="app">
+<body class="is-locked">
+<div class="auth-gate" id="authGate" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+<div class="auth-card" id="authCard">
+<span class="auth-badge"><i class="branddot"></i> ESUN AM / AI ATLAS</span>
+<div class="auth-icon" aria-hidden="true">🔒</div>
+<h2 id="authTitle">金融 AI 應用圖鑑</h2>
+<p>此為內部討論草案看板，請輸入通行密碼以查看與編輯內容。</p>
+<form class="auth-form" id="authForm" autocomplete="off">
+<div class="auth-input-wrap">
+<input class="auth-input" id="authInput" type="password" inputmode="numeric" placeholder="請輸入通行密碼" required autofocus>
+<button class="auth-toggle-vis" id="authToggleVis" type="button" aria-label="顯示或隱藏密碼" title="顯示／隱藏密碼">👁</button>
+</div>
+<button class="auth-submit" type="submit">解鎖進入看板</button>
+<p class="auth-error" id="authError" aria-live="polite"></p>
+</form>
+</div>
+</div>
+<main class="app">
 <header class="hero"><div class="brandline"><span class="brandmark"><i class="branddot"></i> ESUN AM <span style="opacity:.65">/</span> AI ATLAS</span><span class="draft">內部討論草案</span></div>
 <h1>金融 AI 應用圖鑑 <span>✦</span></h1><p>在五欄看板管理已上線專案、執行中專案與工具構想。直接拖曳卡片即可變更狀態，支援直式／橫式換行閱讀切換與卡片 Memo 筆記，所有狀態皆自動儲存在網頁端。</p>
 <div class="hero-stats"><span class="stat"><b id="totalCount">45</b> 個專案與構想</span><span class="stat"><b id="launchedCount">4</b> 項已上線</span><span class="stat"><b id="activeCount">6</b> 項執行中</span><span class="stat"><b id="memoCount">0</b> 則 Memo</span><span class="stat"><b>5</b> 種管理狀態</span></div></header>
@@ -351,6 +392,7 @@ body.is-dragging .quick-drop-bar{display:flex}
 <div class="toolbar-controls">
 <button type="button" class="create-card-btn" id="openCreateBtn">＋ 新增專案／構想</button>
 <button type="button" class="save-badge" id="saveBadge" aria-live="polite" title="點擊立即與雲端伺服器同步最新狀態">☁️ 雲端同步就緒</button>
+<button type="button" class="auth-lock-btn" id="lockAppBtn" title="鎖定畫面，需重新輸入密碼">🔒 鎖定</button>
 <div class="view-switch" role="group" aria-label="閱讀模式切換">
 <button type="button" class="view-btn" data-view-btn="vertical" aria-pressed="false" title="五欄直式並排，由上而下直向閱讀">▥ 直式閱讀</button>
 <button type="button" class="view-btn active" data-view-btn="horizontal" aria-pressed="true" title="五列橫向展開並自動換行，由左至右橫向閱讀">☰ 橫式閱讀</button>
@@ -544,8 +586,13 @@ search.addEventListener("input",drawBoard);
 document.getElementById("detailClose").addEventListener("click",closeDetail);
 detailOverlay.addEventListener("click",function(e){if(e.target===detailOverlay)closeDetail()});
 document.addEventListener("keydown",function(e){if(e.key==="Escape"){if(!detailOverlay.hidden)closeDetail();else if(createOverlay&&!createOverlay.hidden)closeCreateModal()}});
-applyViewMode(viewMode,false);
-drawBoard();
-loadStateFromCloud(false);
-subscribeRealtimeSync();
+const AUTH_SESSION_KEY="financial-ai-atlas-auth-v1",AUTH_PASS="86385617";
+const authGate=document.getElementById("authGate"),authCard=document.getElementById("authCard"),authForm=document.getElementById("authForm"),authInput=document.getElementById("authInput"),authError=document.getElementById("authError"),authToggleVis=document.getElementById("authToggleVis"),lockAppBtn=document.getElementById("lockAppBtn");
+let appInitialized=false;
+function unlockApp(){document.body.classList.remove("is-locked");if(authGate)authGate.hidden=true;try{sessionStorage.setItem(AUTH_SESSION_KEY,"1")}catch(e){}if(!appInitialized){appInitialized=true;applyViewMode(viewMode,false);drawBoard();loadStateFromCloud(false);subscribeRealtimeSync()}}
+function lockApp(){try{sessionStorage.removeItem(AUTH_SESSION_KEY)}catch(e){}closeDetail();closeCreateModal();document.body.classList.add("is-locked");if(authGate)authGate.hidden=false;if(authInput){authInput.value="";authInput.type="password";authInput.focus()}if(authError)authError.textContent=""}
+if(authToggleVis&&authInput){authToggleVis.addEventListener("click",function(){const isPwd=authInput.type==="password";authInput.type=isPwd?"text":"password";authInput.focus()})}
+if(authForm){authForm.addEventListener("submit",function(e){e.preventDefault();const val=(authInput?authInput.value:"").trim();if(val===AUTH_PASS){if(authError)authError.textContent="";unlockApp()}else{if(authError)authError.textContent="密碼錯誤，請重新輸入";if(authCard){authCard.classList.remove("shake");void authCard.offsetWidth;authCard.classList.add("shake")}if(authInput){authInput.select();authInput.focus()}}})}
+if(lockAppBtn)lockAppBtn.addEventListener("click",lockApp);
+try{if(sessionStorage.getItem(AUTH_SESSION_KEY)==="1")unlockApp()}catch(e){}
 </script></body></html>
